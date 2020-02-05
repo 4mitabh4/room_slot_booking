@@ -38,22 +38,22 @@
             <!-- for security purposes  -->
             {% csrf_token %}
             <!-- first name  -->
-            <input type="text" class="form-control form-control-sm" name="first_name" placeholder="First Name"><br>
+            <input type="text" class="form-control form-control-sm" name="first_name" placeholder="First Name" required<br>
 
             <!-- last name  -->
-            <input type="text" class="form-control form-control-sm" name="last_name" placeholder="Last Name"><br>
+            <input type="text" class="form-control form-control-sm" name="last_name" placeholder="Last Name" required><br>
 
             <!-- username  -->
-            <input type="text" class="form-control form-control-sm" name="username" placeholder="username"><br>
+            <input type="text" class="form-control form-control-sm" name="username" placeholder="username" required><br>
 
             <!-- email  -->
-            <input type="email" class="form-control form-control-sm" name="email" placeholder="email"><br>
+            <input type="email" class="form-control form-control-sm" name="email" placeholder="email" required><br>
 
             <!-- password  -->
-            <input type="password" class="form-control form-control-sm" name="password1" placeholder="password"><br>
+            <input type="password" class="form-control form-control-sm" name="password1" placeholder="password" required><br>
 
             <!-- confirm password  -->
-            <input type="password" class="form-control form-control-sm" name="password2" placeholder="Confirm Password"><br>
+            <input type="password" class="form-control form-control-sm" name="password2" placeholder="Confirm Password" required><br>
             
             <!-- messages -->
             {% if messages %}
