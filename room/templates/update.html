@@ -1,0 +1,134 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Update</title>
+  <!-- bootstrap  -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link rel="stylesheet" href="{% static 'css/jquery.datetimepicker.min.css'%}">
+  <script>
+    setTimeout(function() {
+      $("#mx").remove();
+    }, 2000);
+  </script>
+</head>
+<body>
+  <header >
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      
+      <!--home icon  -->
+      <a class="navbar-brand" href=''>
+        <img src="{% static 'images/admin.png' %}" width="30" height="30" class="d-inline-block align-top" alt="">
+        Admin
+      </a>
+      
+      <!-- toggler  -->
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <!-- navbar links  -->
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav ml-auto">
+          
+          <!--checks if user is successfully loged in  -->
+          {% if user.is_authenticated %}
+          
+          <!-- logout  -->
+          <a class="nav-item nav-link text-success" href="#">Hello {{user.username}}</a>
+          <a class="nav-item nav-link text-danger" href="logout">logout</a>
+
+          {% endif %}
+        </div>
+      </div>
+    </nav>
+  </header >
+    <!-- new block  -->
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Room No  -->
+      <div class="col">
+        <div class="form">
+          <form action="" method="post">
+            
+          {% csrf_token %}
+          {{form.errors}}
+            <div class="card card-body">
+              <table class="table">
+                <tr>
+                  <th>Room No</th>
+                  <th>Advanced Booking</th>
+                  <th>Room Available form date</th>
+                  <th>Room Available form time</th>
+                  <th>Room Available till date</th>
+                  <th>Room Available till time</th>
+                </tr>
+                <tr>
+                  {% for x in form %}
+                  <td>{{x}}</td>
+                  {% endfor %}
+                  <td>
+                    <button type="submit" class="btn btn-block btn-success">Save</button>
+                  </td>
+                  <td>
+                    
+                    <a href="{% url 'room_data' %}" class="btn btn-block btn-danger">Cancel</a>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </form>
+        </div> 
+        <!-- messages -->
+        <div>
+          
+          {% if messages %}
+          {% for mes in messages %}
+          <div class="alert alert-danger text-center" role="alert" id='mx'>
+            {{mes}}
+          </div>
+          {% endfor %}
+          {% endif %}
+        </div>
+        </div>
+      </div>
+    </div>
+</div>
+
+  
+ <!-- jQuery library -->
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+ <!-- Popper JS -->
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+ 
+ <!-- Latest compiled JavaScript -->
+ <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+ 
+ <script src="{% static 'js/jquery.datetimepicker.full.min.js'%}"></script>
+ 
+ <script >
+  $('.picker_date').datetimepicker({
+
+    timepicker:false,
+    datepicker:true,
+    format:'Y-m-d',
+    hours12:false,
+  })
+</script>
+<script >
+  $('.picker_time').datetimepicker({
+
+    timepicker:true,
+    datepicker:false,
+    format:'H:i',
+    hours12:false,
+    step:1,
+  })
+</script>
+
+</body>
+ 
+</html>

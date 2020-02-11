@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     # custom apps 
     'login_app',
     'home',
+    'manager',
 ]
 
 MIDDLEWARE = [
