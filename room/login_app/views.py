@@ -30,6 +30,7 @@ def login(request):
       messages.info(request,'invalid credentials')
       return redirect('login')
 
+# if the request is of get type render login page 
   else:
     return render(request,"login.html",{'act':login})
 
