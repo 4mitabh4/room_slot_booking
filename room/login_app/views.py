@@ -1,11 +1,13 @@
 from django.shortcuts import render,redirect
 from django.contrib import messages
-from django.contrib.auth.models import User,auth
+from django.contrib.auth.models import User,auth,Group
 
 
 # login
 def login(request):
-
+  if request.user.is_authenticated:
+    return redirect('/')
+    
   # if request is of post type 
   if request.method=='POST':
 
@@ -29,14 +31,15 @@ def login(request):
       return redirect('login')
 
   else:
-    return render(request,"login.html")
+    return render(request,"login.html",{'act':login})
 
 
 
 
 # register 
 def register(request):
-
+  if request.user.is_authenticated:
+    return redirect('/')
   # if request is of post type
   if request.method=='POST':
 
@@ -66,6 +69,8 @@ def register(request):
       else:
         user=User.objects.create_user(username=username,first_name=first_name,last_name=last_name,email=email,password=password1)
         user.save()
+        group=Group.objects.get(name='customer')
+        group.user_set.add(user)
         return redirect('login')
         
     else:

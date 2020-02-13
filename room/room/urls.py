@@ -29,5 +29,5 @@ urlpatterns = [
     # searches for urls file in home app 
     path('',include('login_app.urls')),
 
-    path('',include('manager.urls')),
+    path('manager/',include('manager.urls')),
 ]
