@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
 
+# different path for the admin side of the webpage
 urlpatterns=[
   path('',views.sign_in_up,name='manager_signin'),
   path('add',views.add_x,name='add'),
