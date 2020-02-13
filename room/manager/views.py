@@ -5,7 +5,7 @@ from django.contrib.auth.models import User,auth,Group
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
-# function for admin accesss
+# function for managerial accesss
 def group_access(request):
   if request.user.groups.exists():
     if request.user.groups.filter(name='manager'):
@@ -15,34 +15,41 @@ def group_access(request):
     
 # function for error check
 def error_check(request):
+      # stores date in list format 
       check_in_date=[int(x) for x in request.POST['check_in_date'].split('-')]
       check_out_date=[int(x) for x in request.POST['check_out_date'].split('-')]
       
       check_in_time=[int(x) for x in request.POST['check_in_time'].split(':')]
       check_out_time=[int(x) for x in request.POST['check_out_time'].split(':')]
 
+      # check if the days is less than 1 days 
       if int(request.POST['days'])<1:
         messages.info(request,'invalid days  given')
         return False
 
+      # checks if the check_in_date(year) is greater than check_out_date(year)
       elif check_in_date[0]>check_out_date[0]:
         messages.info(request,'invalid checkin and checkout years_field given')
         return False
 
+      # checks if the check_in_date(month) is greater than check_out_date(month)
       elif check_in_date[0]==check_out_date[0] and check_in_date[1]>check_out_date[1]:
         messages.info(request,'invalid checkin and checkout months_field given')
         return False
       
+      # checks if the check_in_date(days) is greater than check_out_date(days)
       elif check_in_date[0]==check_out_date[0] and check_in_date[1]==check_out_date[1] \
       and check_in_date[2]>check_out_date[2]:
         messages.info(request,'invalid checkin and checkout days_field given')
         return False
 
+      # checks if the check_in_time(hour) is greater than check_out_time(hour)
       elif check_in_date[0]==check_out_date[0] and check_in_date[1]==check_out_date[1] \
       and check_in_date[2]==check_out_date[2] and check_in_time[0]>check_out_time[0]:
         messages.info(request,'invalid checkin and checkout time(hour)_field given')
         return False
 
+      # checks if the check_in_time(min) is greater than check_out_time(min)
       elif check_in_date[0]==check_out_date[0] and check_in_date[1]==check_out_date[1] \
       and check_in_date[2]==check_out_date[2] and check_in_time[0]==check_out_time[0] \
       and  check_in_time[1]>check_out_time[1]:
@@ -53,20 +60,30 @@ def error_check(request):
         return True
 
 
-# Create your views here.
+
+#decorator to ensure that login is done
 @login_required(login_url='manager_login')
+
+# function to add new room 
 def add_x(request):
-  # manager accesss
+  # to ensure only manager can add data
   if group_access(request)==True:
+    # create form 
     form=AddForm()
     if request.method=='POST':
       form=AddForm(request.POST)
       if form.is_valid():
+
+        # checks if room no is already allocated
         room_no=request.POST['room_no']
         if add.objects.filter(room_no=room_no).exists():
           messages.info(request,'room no already allocated')
+
+          # checks the validity of room no 
         elif int(room_no)<1:
           messages.info(request,'invalid room no given')
+
+          # if no error is found then add new room info 
         elif error_check(request):
           form.save()
           messages.info(request,'data saved')
@@ -74,16 +91,21 @@ def add_x(request):
       else:
         print('form not valid')
     
-    context={'form':form}
-    return render(request,'add.html',context)
+
+    # if request is of get type 
+    else:
+      context={'form':form}
+      return render(request,'add.html',context)
   
   else:
-    return redirect('/')
+    return redirect('room_data')
 
 
 
-# rooms
+#decorator to ensure that login is done
 @login_required(login_url='manager_login')
+
+# function to show the room info 
 def rooms_data(request):
   # manager accesss
   if group_access(request) == True:
@@ -96,8 +118,10 @@ def rooms_data(request):
     return redirect('manager_logout')
   
 
-# update 
+
 @login_required(login_url='manager_login')
+
+# function to update room info 
 def update(request,room_no):
   # manager accesss
   if group_access(request)==True:
@@ -106,20 +130,27 @@ def update(request,room_no):
     if request.method=='POST':
       form_after=UpdateForm(request.POST,instance=up)
       if form_after.is_valid():
+
+        # to make sure change is made 
         if form_after.has_changed()==False:
           messages.info(request,'no change detected')
+
+        # if no error is found then update 
         elif error_check(request):
           form_after.save()
           messages.info(request,'Successfully Updated')
           return redirect('room_data')
-    context={'form':form_before}
 
+
+    context={'form':form_before}
     return render(request,'update.html',context)
   
   else:
-    return redirect('/')
+    return redirect('room_data')
 
 @login_required(login_url='manager_login')
+
+# function to delete room info 
 def delete(request,room_no):
   # manager accesss
   if group_access(request)==True:
@@ -135,11 +166,12 @@ def delete(request,room_no):
     return redirect('/')
 
 
+# function to render manager home page
 def sign_in_up(request):
   return render(request,'manager.html')
 
 
-  
+# function to grant access to manager only 
 def manager_login(request):
     
     if request.user.is_authenticated:
@@ -171,6 +203,7 @@ def manager_login(request):
       return render(request,"login.html",{'act':manager_login})
 
 
+# to create new manager account 
 def manager_register(request):
   if request.user.is_authenticated:
     return redirect('room_data')
@@ -216,7 +249,7 @@ def manager_register(request):
     return render(request,"register.html")
 
 
-# logout
+# logout 
 def manager_logout(request):
   auth.logout(request)
   return redirect('manager_signin')
