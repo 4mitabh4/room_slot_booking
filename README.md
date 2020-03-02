@@ -1,2 +1,1 @@
-# room
-django project
+# Room Booking System Django Project
