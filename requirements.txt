@@ -4,22 +4,14 @@ requirements are stated below :
 Python==3.8.0
 asgiref==3.2.3
 Django==3.0.3
-mysqlclient==1.4.6
-pytz==2019.3
-sqlparse==0.3.0
 virtualenv==16.7.9
 html==5
 css==3
 bootstrap==4
 jquery==3.4.1
 pip==20.0.2
-# database used
-  mysql 
-# software used to test on local server
-  xaamp==3.2.4
 boto3==1.11.15
 botocore==1.14.15
-Django==3.0.3
 django-storages==1.9.1
 docutils==0.15.2
 jmespath==0.9.4
@@ -30,3 +22,8 @@ s3transfer==0.3.3
 six==1.14.0
 sqlparse==0.3.0
 urllib3==1.25.8
+
+# database used
+  mysql 
+# software used to test on local server
+  xaamp==3.2.4
