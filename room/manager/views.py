@@ -1,9 +1,11 @@
 from django.shortcuts import render,redirect
 from .forms import AddForm,UpdateForm
-from .models import add
+from .models import *
 from django.contrib.auth.models import User,auth,Group
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from datetime import timedelta
+
 
 # function for managerial accesss
 def group_access(request):
@@ -16,11 +18,11 @@ def group_access(request):
 # function for error check
 def error_check(request):
       # stores date in list format 
-      check_in_date=[int(x) for x in request.POST['check_in_date'].split('-')]
-      check_out_date=[int(x) for x in request.POST['check_out_date'].split('-')]
+      # check_in_date=[int(x) for x in request.POST['check_in_date'].split('-')]
+      # check_out_date=[int(x) for x in request.POST['check_out_date'].split('-')]
       
-      check_in_time=[int(x) for x in request.POST['check_in_time'].split(':')]
-      check_out_time=[int(x) for x in request.POST['check_out_time'].split(':')]
+      # check_in_time=[int(x) for x in request.POST['check_in_time'].split(':')]
+      # check_out_time=[int(x) for x in request.POST['check_out_time'].split(':')]
 
       # check if the days is less than 1 days 
       if int(request.POST['days'])<1:
@@ -28,33 +30,33 @@ def error_check(request):
         return False
 
       # checks if the check_in_date(year) is greater than check_out_date(year)
-      elif check_in_date[0]>check_out_date[0]:
-        messages.info(request,'invalid checkin and checkout years_field given')
-        return False
+      # elif check_in_date[0]>check_out_date[0]:
+      #   messages.info(request,'invalid checkin and checkout years_field given')
+      #   return False
 
       # checks if the check_in_date(month) is greater than check_out_date(month)
-      elif check_in_date[0]==check_out_date[0] and check_in_date[1]>check_out_date[1]:
-        messages.info(request,'invalid checkin and checkout months_field given')
-        return False
+      # elif check_in_date[0]==check_out_date[0] and check_in_date[1]>check_out_date[1]:
+      #   messages.info(request,'invalid checkin and checkout months_field given')
+      #   return False
       
       # checks if the check_in_date(days) is greater than check_out_date(days)
-      elif check_in_date[0]==check_out_date[0] and check_in_date[1]==check_out_date[1] \
-      and check_in_date[2]>check_out_date[2]:
-        messages.info(request,'invalid checkin and checkout days_field given')
-        return False
+      # elif check_in_date[0]==check_out_date[0] and check_in_date[1]==check_out_date[1] \
+      # and check_in_date[2]>check_out_date[2]:
+      #   messages.info(request,'invalid checkin and checkout days_field given')
+      #   return False
 
       # checks if the check_in_time(hour) is greater than check_out_time(hour)
-      elif check_in_date[0]==check_out_date[0] and check_in_date[1]==check_out_date[1] \
-      and check_in_date[2]==check_out_date[2] and check_in_time[0]>check_out_time[0]:
-        messages.info(request,'invalid checkin and checkout time(hour)_field given')
-        return False
+      # elif check_in_date[0]==check_out_date[0] and check_in_date[1]==check_out_date[1] \
+      # and check_in_date[2]==check_out_date[2] and check_in_time[0]>check_out_time[0]:
+      #   messages.info(request,'invalid checkin and checkout time(hour)_field given')
+      #   return False
 
       # checks if the check_in_time(min) is greater than check_out_time(min)
-      elif check_in_date[0]==check_out_date[0] and check_in_date[1]==check_out_date[1] \
-      and check_in_date[2]==check_out_date[2] and check_in_time[0]==check_out_time[0] \
-      and  check_in_time[1]>check_out_time[1]:
-        messages.info(request,'invalid checkin and checkout time(min)_field given')
-        return False
+      # elif check_in_date[0]==check_out_date[0] and check_in_date[1]==check_out_date[1] \
+      # and check_in_date[2]==check_out_date[2] and check_in_time[0]==check_out_time[0] \
+      # and  check_in_time[1]>check_out_time[1]:
+      #   messages.info(request,'invalid checkin and checkout time(min)_field given')
+      #   return False
       
       else:
         return True
@@ -253,3 +255,33 @@ def manager_register(request):
 def manager_logout(request):
   auth.logout(request)
   return redirect('manager_signin')
+
+# booked rooms
+def booked_rooms(request):
+  booking = new_booking.objects.all()
+  context = {'booking': booking}
+  return render(request, "booked_rooms.html", context)
+
+
+@login_required(login_url='manager_login')  
+def user_profile(request,id):
+    new_bookings = new_booking.objects.filter(customer=id)
+    old_bookings = old_booking.objects.filter(customer=id)
+    user = User.objects.get(id=id)
+
+    username=user.username
+    first_name = user.first_name
+    last_name = user.last_name
+    email=user.email
+    context = {'new_bookings': new_bookings,
+    'old_bookings': old_bookings,
+    'username': username,
+    'first_name': first_name,
+    'last_name': last_name,
+    'email':email,
+    }
+    for x in new_bookings:
+      x.new.date = x.booking_time.date() + timedelta(days=x.new.days)
+    for y in old_bookings:
+      y.old.date = y.time.date() + timedelta(days=y.old.days)
+    return render(request, 'user_info.html', context)

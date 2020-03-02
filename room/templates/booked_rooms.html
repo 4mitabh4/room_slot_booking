@@ -21,7 +21,7 @@
     <header>
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <!--home icon  -->
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="{% url 'room_data'%}">
           <img
             src="{% static 'images/admin.png' %}"
             width="30"
@@ -50,14 +50,9 @@
             <!--checks if user is successfully loged in  -->
             {% if user.is_authenticated %}
             <!-- home -->
-          <a class="nav-item nav-link text-primary" href="/"
-          >Home</a
-        >
-            <!-- booked rooms  -->
-            <a class="nav-item nav-link text-info" href="booked_rooms"
-              >Booked rooms</a
+            <a class="nav-item nav-link text-info" href="/"
+              >Home</a
             >
-            
             <!-- add room  -->
             <a class="nav-item nav-link text-primary" href="add"
               >Add_New_Room</a
@@ -67,7 +62,7 @@
             <a class="nav-item nav-link text-success" href="#"
               >Hello {{user.username}}</a
             >
-            <a class="nav-item nav-link text-danger" href="{% url 'manager_logout' %}">logout</a>
+            <a class="nav-item nav-link text-danger" href="{% url 'user_logout' %}">logout</a>
 
             {% endif %}
           </div>
@@ -86,40 +81,28 @@
       <div class="row">
         <div class="col">
           <div class="card card-body">
+            <h4 class="text-center text-info">Booked rooms</h4>
             <table class="table">
               <tr>
                 <th>room no</th>
                 <th>Advanced Booking</th>
                 <th>Room Available form time</th>
                 <th>Room Available till time</th>
-                <th>booking info</th>
-                <th class="text-center">Update</th>
-                <th class="text-center">Delete</th>
+                <th>Booked by</th>
               </tr>
 
-              {% for x in room %}
+              {% for x in booking %}
               <tr>
-                <td>{{x.room_no}}</td>
-                <td>{{x.days}} days</td>
-                <td>{{x.check_in_time}}</td>
-                <td>{{x.check_out_time}}</td>
-                <td>
-                  {% if x.booked %} Booked {% else %} Available {% endif %}
-                </td>
-                <td>
-                  <a
-                    href="{% url 'update_data' x.room_no %}"
-                    class="btn btn-block btn-info"
-                    >Update</a
-                  >
-                </td>
-                <td>
-                  <a
-                    href="{% url 'delete_data' x.room_no %}"
-                    class="btn btn-block btn-danger"
-                    >Delete</a
-                  >
-                </td>
+                <td>{{x.new.room_no}}</td>
+                <td>{{x.new.days}} days</td>
+                <td>{{x.new.check_in_time}}</td>
+                <td>{{x.new.check_out_time}}</td>
+                <td><a
+                  href="{% url 'user_profile' x.customer.id %}"
+                  class="btn btn-block btn-outline-primary"
+                  >{{x.customer.username}}</a
+                ></td>
+                
               </tr>
               {% endfor %}
             </table>

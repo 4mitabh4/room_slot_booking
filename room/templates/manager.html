@@ -22,6 +22,7 @@
   </script>
 </head>
 <body>
+  
   <div class="container py-5">
     <div class="row">
         <div class="col-md-12">
@@ -45,6 +46,15 @@
                         </div>
                     </div>
                     <!-- messages -->
+                    <div class="text-center font-weight-bold ">
+                      {% if user.is_authenticated %}
+          <!-- logout  -->
+          <a  href="#" class="text-light">Currently logged as {{user.username}}</a>
+          <a  href="{% url 'user_logout' %}" class="text-danger ">logout</a>
+          {% else %}
+          <a href="/" class="text-light">Home</a>
+          {% endif %}
+                    </div>
             
                 </div>
             </div>

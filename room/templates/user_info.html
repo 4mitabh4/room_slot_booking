@@ -1,0 +1,158 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>user profile</title>
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+    <style>
+      .my-custom-scrollbar1 {
+        position: relative;
+        height: 200px;
+        overflow: auto;
+      }
+      .my-custom-scrollbar2 {
+        position: relative;
+        height: 425px;
+        overflow: auto;
+      }
+      .table-wrapper-scroll-y {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- navbar  -->
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <!--home icon  -->
+        <a class="navbar-brand" href="{% url 'room_data'%}">
+          <img
+            src="{% static 'images/admin.png' %}"
+            width="30"
+            height="30"
+            class="d-inline-block align-top"
+            alt=""
+          />
+          Admin
+        </a>
+
+        <!-- toggler  -->
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarNavAltMarkup"
+          aria-controls="navbarNavAltMarkup"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <!-- navbar links  -->
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div class="navbar-nav ml-auto">
+            <!--checks if user is successfully loged in  -->
+            {% if user.is_authenticated %}
+
+            <!-- logout  -->
+            <a class="nav-item nav-link" href="#">Hello {{user.username}}</a>
+            <a class="nav-item nav-link" href="{% url 'manager_logout'%}">logout</a>
+
+            {% else %}
+
+            <!-- sign up  -->
+            <a class="nav-item nav-link" href="register">Sign Up</a>
+
+            <!-- sign in  -->
+            <a class="nav-item nav-link" href="login">Sign In</a>
+            {% endif %}
+          </div>
+        </div>
+      </nav>
+    </header>
+    <div class="row m-2 ">
+      <div class="col-md-6 ">
+        <!-- user info  -->
+        <div class="card card-body ">
+          <div class="d-flex">
+            <h5 class="font-weight-bold">username:</h3>
+            <h5 class="font-italic">{{ username}}</h3>
+          </div>
+          <div class="d-flex">
+            <h5 class="font-weight-bold">first_name:</h3>
+            <h5 class="font-italic">{{ first_name}}</h5>
+          </div>
+          <div class="d-flex">
+            <h5 class="font-weight-bold">last_name:</h3>
+            <h5 class="font-italic">{{ last_name}}</h5>
+          </div>
+          <div class="d-flex">
+            <h5 class="font-weight-bold">email:</h5>
+            <h5 class="font-italic">{{ email }}</h5>
+          </div>
+        </div>
+        <!-- old bookings -->
+        <div class="card card-body mt-2">
+          <h4 class="text-center text-info">Old Bookings</h4>
+
+          <div class="table-wrapper-scroll-y my-custom-scrollbar1">
+            <table class="table text-center table-bordered table-striped mb-0">
+              <thead>
+                <tr>
+                  <th>Room no</th>
+                  <th>Date</th>
+                  <th>Checkin time</th>
+                  <th>Checkout time</th>
+                  <th>Booking time</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for x in old_bookings %}
+                <tr class="text-center">
+                  <td>{{x.old.room_no}}</td>
+                  <td>{{x.old.date}}</td>
+                  <td>{{x.old.check_in_time}}</td>
+                  <td>{{x.old.check_out_time}}</td>
+                  <td>{{x.time}}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 ">
+        <!-- current bookings  -->
+        <div class="card card-body ">
+          <h4 class="text-center text-primary">Current Bookings</h4>
+          <div class="table-wrapper-scroll-y my-custom-scrollbar2">
+            <table class="table text-center table-bordered table-striped mb-0">              <tr class="text-center">
+                <th>Room no</th>
+                <th>Date</th>
+                <th>Checkin time</th>
+                <th>Checkout time</th>
+              </tr>
+              {% for x in new_bookings %}
+              <tr class="text-center">
+                <td>{{x.new.room_no}}</td>
+                <td>{{x.new.date}}</td>
+                <td>{{x.new.check_in_time}}</td>
+                <td>{{x.new.check_out_time}}</td>
+                
+              </tr>
+              {% endfor %}
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

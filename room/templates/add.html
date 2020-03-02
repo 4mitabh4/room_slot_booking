@@ -20,7 +20,7 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       
       <!--home icon  -->
-      <a class="navbar-brand" href=''>
+      <a class="navbar-brand" href="{% url 'room_data'%}">
         <img src="{% static 'images/admin.png' %}" width="30" height="30" class="d-inline-block align-top" alt="">
         Admin
       </a>
@@ -35,10 +35,13 @@
           
           <!--checks if user is successfully loged in  -->
           {% if user.is_authenticated %}
-          
+          <!-- home -->
+          <a class="nav-item nav-link text-info" href="/"
+          >Home</a
+        >
           <!-- logout  -->
-          <a class="nav-item nav-link text-success" href="#">Hello {{user.username}}</a>
-          <a class="nav-item nav-link text-danger" href="logout">logout</a>
+          <a class="nav-item nav-link text-success" href="{% url 'profile'%}">Hello {{user.username}}</a>
+          <a class="nav-item nav-link text-danger" href="{% url 'user_logout' %}">logout</a>
 
           {% endif %}
         </div>
@@ -59,9 +62,7 @@
                 <tr>
                   <th>Room No</th>
                   <th>Advanced Booking</th>
-                  <th>Room Available form date</th>
                   <th>Room Available form time</th>
-                  <th>Room Available till date</th>
                   <th>Room Available till time</th>
                   
                   <th class="text-center">Add</th>

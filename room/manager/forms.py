@@ -6,7 +6,8 @@ from django import forms
 class AddForm(ModelForm):
   class Meta:
     model = add
-    fields='__all__'
+    # fields='__all__'
+    fields=['room_no','days','check_in_time','check_out_time']
     widgets={
       # room_no 
       'room_no':forms.NumberInput(
@@ -18,13 +19,6 @@ class AddForm(ModelForm):
         attrs={'class':'form-control input','placeholder':"days"}
         ),
 
-        # check_in_date
-      'check_in_date':forms.DateInput(
-        attrs={
-          'class':'form-control picker_date',
-          'placeholder':"yy-mm-dd",
-          }
-          ,format="%Y-%m-%d"),
 
           # check_in_time
       'check_in_time':forms.TimeInput(
@@ -33,14 +27,6 @@ class AddForm(ModelForm):
           'placeholder':"hour:min",
           },
           format="%H:%M"),
-
-          # check_out_date
-        'check_out_date':forms.DateInput(
-        attrs={
-          'class':'form-control picker_date',
-          'placeholder':"yy-mm-dd",
-          }
-          ,format="%Y-%m-%d"),
 
           # check_out_time
         'check_out_time':forms.TimeInput(
@@ -67,13 +53,6 @@ class UpdateForm(ModelForm):
         attrs={'class':'form-control input','placeholder':"days"}
         ),
 
-        # check_in_date
-      'check_in_date':forms.DateInput(
-        attrs={
-          'class':'form-control picker_date',
-          'placeholder':"yy-mm-dd",
-          }
-          ,format="%Y-%m-%d"),
 
           # check_in_time
       'check_in_time':forms.TimeInput(
@@ -83,13 +62,6 @@ class UpdateForm(ModelForm):
           },
           format="%H:%M"),
 
-          # check_out_date
-        'check_out_date':forms.DateInput(
-        attrs={
-          'class':'form-control picker_date',
-          'placeholder':"yy-mm-dd",
-          }
-          ,format="%Y-%m-%d"),
 
           # check_out_time
         'check_out_time':forms.TimeInput(
