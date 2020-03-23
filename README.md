@@ -1,4 +1,4 @@
-##email:babaimajumder8@gmail.com
+## email:babaimajumder8@gmail.com
 # Room Booking System Django Project
 ## current features
 * USER
